@@ -1,11 +1,16 @@
 import React, { Component } from "react";
+import uniqid from "uniqid";
+import Overview from "./components/Overview";
 import "./App.css";
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
-      task: { text: "" },
+      task: {
+        text: "",
+        id: uniqid(),
+      },
       tasks: [],
     };
   }
@@ -15,6 +20,7 @@ class App extends Component {
     this.setState({
       task: {
         text: e.target.value,
+        id: this.state.task.id,
       },
     });
   };
@@ -23,11 +29,15 @@ class App extends Component {
     e.preventDefault();
     this.setState({
       tasks: this.state.tasks.concat(this.state.task),
-      task: { text: "" },
+      task: {
+        text: "",
+        id: uniqid(),
+      },
     });
   };
 
   render() {
+    const { task, tasks } = this.state;
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
@@ -36,10 +46,11 @@ class App extends Component {
             type="text"
             id="taskInput"
             onChange={this.handleChange}
-            // value={this.task.text}
+            value={task.text}
           ></input>
           <button type="submit">Add Task</button>
         </form>
+        <Overview tasks={tasks} />
       </div>
     );
   }
